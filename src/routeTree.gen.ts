@@ -9,8 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OurTeamRouteImport } from './routes/our-team'
+import { Route as OtherProjectsRouteImport } from './routes/other-projects'
+import { Route as MontessoriProjectRouteImport } from './routes/montessori-project'
 import { Route as IndexRouteImport } from './routes/index'
 
+const OurTeamRoute = OurTeamRouteImport.update({
+  id: '/our-team',
+  path: '/our-team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OtherProjectsRoute = OtherProjectsRouteImport.update({
+  id: '/other-projects',
+  path: '/other-projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MontessoriProjectRoute = MontessoriProjectRouteImport.update({
+  id: '/montessori-project',
+  path: '/montessori-project',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +37,61 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/montessori-project': typeof MontessoriProjectRoute
+  '/other-projects': typeof OtherProjectsRoute
+  '/our-team': typeof OurTeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/montessori-project': typeof MontessoriProjectRoute
+  '/other-projects': typeof OtherProjectsRoute
+  '/our-team': typeof OurTeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/montessori-project': typeof MontessoriProjectRoute
+  '/other-projects': typeof OtherProjectsRoute
+  '/our-team': typeof OurTeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/montessori-project' | '/other-projects' | '/our-team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/montessori-project' | '/other-projects' | '/our-team'
+  id: '__root__' | '/' | '/montessori-project' | '/other-projects' | '/our-team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MontessoriProjectRoute: typeof MontessoriProjectRoute
+  OtherProjectsRoute: typeof OtherProjectsRoute
+  OurTeamRoute: typeof OurTeamRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/our-team': {
+      id: '/our-team'
+      path: '/our-team'
+      fullPath: '/our-team'
+      preLoaderRoute: typeof OurTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/other-projects': {
+      id: '/other-projects'
+      path: '/other-projects'
+      fullPath: '/other-projects'
+      preLoaderRoute: typeof OtherProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/montessori-project': {
+      id: '/montessori-project'
+      path: '/montessori-project'
+      fullPath: '/montessori-project'
+      preLoaderRoute: typeof MontessoriProjectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MontessoriProjectRoute: MontessoriProjectRoute,
+  OtherProjectsRoute: OtherProjectsRoute,
+  OurTeamRoute: OurTeamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
