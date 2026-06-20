@@ -1,0 +1,11 @@
+name = "joy-for-the-children"
+compatibility_date = "2025-06-01"
+compatibility_flags = ["nodejs_compat"]
+main = ".output/server/index.mjs"
+
+[assets]
+directory = ".output/public"
+binding = "ASSETS"
+
+# Build with `bun run build` (or `npm run build`), then deploy with `wrangler deploy`.
+# Set environment variables via `wrangler secret put <NAME>` or the Cloudflare dashboard.
