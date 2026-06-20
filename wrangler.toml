@@ -1,7 +1,7 @@
 name = "joy-for-the-children"
 compatibility_date = "2025-06-01"
 compatibility_flags = ["nodejs_compat"]
-main = ".output/server/index.mjs"
+main = ".output/server/server.js"
 
 [assets]
 directory = ".output/public"
