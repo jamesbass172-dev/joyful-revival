@@ -1,4 +1,27 @@
 // Image URLs from the original source site (Wix CDN). Kept verbatim per request.
+export const logoUrl =
+  "https://static.wixstatic.com/media/eee064_6917632f497c499f94149a34f18721b6~mv2.png";
+
+export const projects = [
+  {
+    title: "BAG Program",
+    img: "https://static.wixstatic.com/media/eee064_97b9318ee3d34530bd06d8a397e763cc~mv2.jpg/v1/fill/w_576,h_576,al_c,q_80,enc_avif,quality_auto/41v.jpg",
+    body: "Bridging Access for Girls program aims to provide free school supplies and materials to underprivileged girls.",
+    cta: { label: "Coming Soon", href: "#" },
+  },
+  {
+    title: "Tungi Outreach Program",
+    img: "https://static.wixstatic.com/media/eee064_df20c313b8eb4b008b735b13dbdb9134~mv2.jpg/v1/fill/w_603,h_603,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/3v.jpg",
+    body: "Providing food, clothes, and support to underprivileged children and their families.",
+    cta: { label: "Learn More", href: "/montessori-project" },
+  },
+  {
+    title: "Legal Assistance",
+    img: "https://static.wixstatic.com/media/eee064_6868867ac0564d25b4d0435eb68559fa~mv2.jpg/v1/fill/w_603,h_603,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ai-generated-IMAGE.jpg",
+    body: "Expert legal aid to defend children's rights and ensure safety.",
+    cta: { label: "Coming Soon", href: "#" },
+  },
+];
 export const heroImages = [
   "https://static.wixstatic.com/media/eee064_83db12877d5a4a5ab962cdbebaad69b0~mv2.jpg/v1/fill/w_1280,h_846,fp_0.50_0.50,q_85,enc_auto/11%20p%20h.jpg",
   "https://static.wixstatic.com/media/eee064_b3bc651d38db4b19865da26ba3dcee13~mv2.jpg/v1/fill/w_1086,h_717,fp_0.50_0.50,q_85,enc_auto/13%20p%20h.jpg",
