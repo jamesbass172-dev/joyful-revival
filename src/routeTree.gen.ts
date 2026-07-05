@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TungiOutreachRouteImport } from './routes/tungi-outreach'
 import { Route as OurTeamRouteImport } from './routes/our-team'
 import { Route as OtherProjectsRouteImport } from './routes/other-projects'
 import { Route as MontessoriProjectRouteImport } from './routes/montessori-project'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TungiOutreachRoute = TungiOutreachRouteImport.update({
+  id: '/tungi-outreach',
+  path: '/tungi-outreach',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OurTeamRoute = OurTeamRouteImport.update({
   id: '/our-team',
   path: '/our-team',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
+  '/tungi-outreach': typeof TungiOutreachRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
+  '/tungi-outreach': typeof TungiOutreachRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,30 @@ export interface FileRoutesById {
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
+  '/tungi-outreach': typeof TungiOutreachRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/montessori-project' | '/other-projects' | '/our-team'
+  fullPaths:
+    | '/'
+    | '/montessori-project'
+    | '/other-projects'
+    | '/our-team'
+    | '/tungi-outreach'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/montessori-project' | '/other-projects' | '/our-team'
-  id: '__root__' | '/' | '/montessori-project' | '/other-projects' | '/our-team'
+  to:
+    | '/'
+    | '/montessori-project'
+    | '/other-projects'
+    | '/our-team'
+    | '/tungi-outreach'
+  id:
+    | '__root__'
+    | '/'
+    | '/montessori-project'
+    | '/other-projects'
+    | '/our-team'
+    | '/tungi-outreach'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +92,18 @@ export interface RootRouteChildren {
   MontessoriProjectRoute: typeof MontessoriProjectRoute
   OtherProjectsRoute: typeof OtherProjectsRoute
   OurTeamRoute: typeof OurTeamRoute
+  TungiOutreachRoute: typeof TungiOutreachRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tungi-outreach': {
+      id: '/tungi-outreach'
+      path: '/tungi-outreach'
+      fullPath: '/tungi-outreach'
+      preLoaderRoute: typeof TungiOutreachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/our-team': {
       id: '/our-team'
       path: '/our-team'
@@ -107,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   MontessoriProjectRoute: MontessoriProjectRoute,
   OtherProjectsRoute: OtherProjectsRoute,
   OurTeamRoute: OurTeamRoute,
+  TungiOutreachRoute: TungiOutreachRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
