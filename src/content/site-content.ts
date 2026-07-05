@@ -13,7 +13,7 @@ export const projects = [
     title: "Tungi Outreach Program",
     img: "https://static.wixstatic.com/media/eee064_df20c313b8eb4b008b735b13dbdb9134~mv2.jpg/v1/fill/w_603,h_603,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/3v.jpg",
     body: "Providing food, clothes, and support to underprivileged children and their families.",
-    cta: { label: "Learn More", href: "/montessori-project" },
+    cta: { label: "Learn More", href: "/tungi-outreach" },
   },
   {
     title: "Legal Assistance",
