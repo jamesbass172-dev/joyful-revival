@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { logoUrl } from "@/content/site-content";
 
 const links = [
   { to: "/", label: "Home" },
@@ -15,7 +16,7 @@ export function SiteNav() {
     <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border">
       <div className="container-narrow flex items-center justify-between py-4">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="h-9 w-9 rounded-full bg-primary text-primary-foreground grid place-items-center font-display text-lg">J</span>
+          <img src={logoUrl} alt="JOYCO logo" className="h-10 w-10 object-contain" />
           <span className="font-display text-lg font-semibold tracking-tight">Joy for the Children</span>
         </Link>
         <nav className="hidden md:flex items-center gap-1">

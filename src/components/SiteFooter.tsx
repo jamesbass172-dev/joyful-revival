@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin } from "lucide-react";
+import { logoUrl } from "@/content/site-content";
 
 export function SiteFooter() {
   return (
@@ -7,7 +8,7 @@ export function SiteFooter() {
       <div className="container-narrow py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <span className="h-10 w-10 rounded-full bg-accent text-accent-foreground grid place-items-center font-display text-lg">J</span>
+            <img src={logoUrl} alt="JOYCO logo" className="h-11 w-11 object-contain bg-white/10 rounded-full p-1" />
             <span className="font-display text-xl">Joy for the Children</span>
           </div>
           <p className="text-primary-foreground/80 max-w-md leading-relaxed">
