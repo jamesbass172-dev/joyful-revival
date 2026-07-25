@@ -34,7 +34,7 @@ export function SiteFooter() {
         <div className="container-narrow py-6 flex flex-col md:flex-row justify-between gap-2 text-xs text-primary-foreground/60">
           <p>© {new Date().getFullYear()} Joy for the Children (JOYCO). All rights reserved.</p>
           <p>
-            <Link to="/" className="hover:text-accent">Home</Link> · <Link to="/our-team" className="hover:text-accent">Team</Link>
+            <Link to="/" className="hover:text-accent">Home</Link> · <Link to="/our-team" className="hover:text-accent">Team</Link> · <Link to="/admin" className="hover:text-accent">Admin Portal</Link>
           </p>
         </div>
       </div>
