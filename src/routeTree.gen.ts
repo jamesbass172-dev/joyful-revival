@@ -13,7 +13,14 @@ import { Route as TungiOutreachRouteImport } from './routes/tungi-outreach'
 import { Route as OurTeamRouteImport } from './routes/our-team'
 import { Route as OtherProjectsRouteImport } from './routes/other-projects'
 import { Route as MontessoriProjectRouteImport } from './routes/montessori-project'
+import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminStudentsRouteImport } from './routes/admin.students'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminFoodRouteImport } from './routes/admin.food'
+import { Route as AdminAttendanceRouteImport } from './routes/admin.attendance'
 
 const TungiOutreachRoute = TungiOutreachRouteImport.update({
   id: '/tungi-outreach',
@@ -35,60 +42,137 @@ const MontessoriProjectRoute = MontessoriProjectRouteImport.update({
   path: '/montessori-project',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin-login',
+  path: '/admin-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStudentsRoute = AdminStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFoodRoute = AdminFoodRouteImport.update({
+  id: '/food',
+  path: '/food',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAttendanceRoute = AdminAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin-login': typeof AdminLoginRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
   '/tungi-outreach': typeof TungiOutreachRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/food': typeof AdminFoodRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/students': typeof AdminStudentsRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin-login': typeof AdminLoginRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
   '/tungi-outreach': typeof TungiOutreachRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/food': typeof AdminFoodRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/students': typeof AdminStudentsRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin-login': typeof AdminLoginRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
   '/tungi-outreach': typeof TungiOutreachRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/food': typeof AdminFoodRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/students': typeof AdminStudentsRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/admin-login'
     | '/montessori-project'
     | '/other-projects'
     | '/our-team'
     | '/tungi-outreach'
+    | '/admin/attendance'
+    | '/admin/food'
+    | '/admin/settings'
+    | '/admin/students'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin-login'
     | '/montessori-project'
     | '/other-projects'
     | '/our-team'
     | '/tungi-outreach'
+    | '/admin/attendance'
+    | '/admin/food'
+    | '/admin/settings'
+    | '/admin/students'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/admin-login'
     | '/montessori-project'
     | '/other-projects'
     | '/our-team'
     | '/tungi-outreach'
+    | '/admin/attendance'
+    | '/admin/food'
+    | '/admin/settings'
+    | '/admin/students'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
   MontessoriProjectRoute: typeof MontessoriProjectRoute
   OtherProjectsRoute: typeof OtherProjectsRoute
   OurTeamRoute: typeof OurTeamRoute
@@ -125,6 +209,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MontessoriProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-login': {
+      id: '/admin-login'
+      path: '/admin-login'
+      fullPath: '/admin-login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -132,11 +230,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/students': {
+      id: '/admin/students'
+      path: '/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AdminStudentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/food': {
+      id: '/admin/food'
+      path: '/food'
+      fullPath: '/admin/food'
+      preLoaderRoute: typeof AdminFoodRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/attendance': {
+      id: '/admin/attendance'
+      path: '/attendance'
+      fullPath: '/admin/attendance'
+      preLoaderRoute: typeof AdminAttendanceRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAttendanceRoute: typeof AdminAttendanceRoute
+  AdminFoodRoute: typeof AdminFoodRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStudentsRoute: typeof AdminStudentsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAttendanceRoute: AdminAttendanceRoute,
+  AdminFoodRoute: AdminFoodRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminStudentsRoute: AdminStudentsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AdminLoginRoute: AdminLoginRoute,
   MontessoriProjectRoute: MontessoriProjectRoute,
   OtherProjectsRoute: OtherProjectsRoute,
   OurTeamRoute: OurTeamRoute,
