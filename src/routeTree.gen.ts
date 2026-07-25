@@ -13,6 +13,8 @@ import { Route as TungiOutreachRouteImport } from './routes/tungi-outreach'
 import { Route as OurTeamRouteImport } from './routes/our-team'
 import { Route as OtherProjectsRouteImport } from './routes/other-projects'
 import { Route as MontessoriProjectRouteImport } from './routes/montessori-project'
+import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TungiOutreachRoute = TungiOutreachRouteImport.update({
@@ -35,6 +37,16 @@ const MontessoriProjectRoute = MontessoriProjectRouteImport.update({
   path: '/montessori-project',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin-login',
+  path: '/admin-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +55,8 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/admin-login': typeof AdminLoginRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
@@ -50,6 +64,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/admin-login': typeof AdminLoginRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
@@ -58,6 +74,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/admin-login': typeof AdminLoginRoute
   '/montessori-project': typeof MontessoriProjectRoute
   '/other-projects': typeof OtherProjectsRoute
   '/our-team': typeof OurTeamRoute
@@ -67,6 +85,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/admin-login'
     | '/montessori-project'
     | '/other-projects'
     | '/our-team'
@@ -74,6 +94,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
+    | '/admin-login'
     | '/montessori-project'
     | '/other-projects'
     | '/our-team'
@@ -81,6 +103,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/admin-login'
     | '/montessori-project'
     | '/other-projects'
     | '/our-team'
@@ -89,6 +113,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   MontessoriProjectRoute: typeof MontessoriProjectRoute
   OtherProjectsRoute: typeof OtherProjectsRoute
   OurTeamRoute: typeof OurTeamRoute
@@ -125,6 +151,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MontessoriProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-login': {
+      id: '/admin-login'
+      path: '/admin-login'
+      fullPath: '/admin-login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -137,6 +177,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  AdminLoginRoute: AdminLoginRoute,
   MontessoriProjectRoute: MontessoriProjectRoute,
   OtherProjectsRoute: OtherProjectsRoute,
   OurTeamRoute: OurTeamRoute,

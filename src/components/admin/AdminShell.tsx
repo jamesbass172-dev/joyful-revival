@@ -5,13 +5,14 @@ import { LayoutDashboard, Users, ClipboardCheck, UtensilsCrossed, Settings, Lock
 import { lockAdmin } from "@/lib/admin/gate.functions";
 import { logoUrl } from "@/content/site-content";
 
-const items = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const items: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/students", label: "Students", icon: Users },
   { to: "/admin/attendance", label: "Attendance", icon: ClipboardCheck },
   { to: "/admin/food", label: "Food Contributions", icon: UtensilsCrossed },
   { to: "/admin/settings", label: "Settings", icon: Settings },
-] as const;
+];
 
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
