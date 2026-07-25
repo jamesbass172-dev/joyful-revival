@@ -7,3 +7,18 @@ main = "dist/server/server.js"
 [assets]
 directory = "dist/client"
 binding = "ASSETS"
+
+# ---------------------------------------------------------------------------
+# Cloudflare D1 binding for the admin portal.
+# Create the database once, then uncomment this block and paste the printed id.
+#
+#   wrangler d1 create joyco-admin
+#   wrangler d1 execute joyco-admin --file=migrations/0001_admin.sql --remote
+#
+# Until this block is enabled, the admin portal falls back to an in-memory
+# store inside the Worker isolate (data will be lost on redeploy).
+# ---------------------------------------------------------------------------
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "joyco-admin"
+# database_id = "REPLACE_WITH_ID_FROM_WRANGLER"
