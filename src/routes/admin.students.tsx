@@ -147,6 +147,13 @@ function StudentDialog({ initial, onClose, onSaved }: { initial: Partial<Student
           <h2 className="font-semibold">{form.id ? `Edit ${form.id}` : "New student"}</h2>
         </div>
         <div className="p-5 grid grid-cols-2 gap-3">
+          <div className="col-span-2">
+            <PhotoPicker
+              value={form.photo_url}
+              name={form.full_name}
+              onChange={(v) => set("photo_url", v)}
+            />
+          </div>
           <Field label="Full name" required><input required value={form.full_name ?? ""} onChange={(e) => set("full_name", e.target.value)} className={input} /></Field>
           <Field label="Sex"><select value={form.sex ?? ""} onChange={(e) => set("sex", (e.target.value || undefined) as Student["sex"])} className={input}><option value="">—</option><option>Male</option><option>Female</option></select></Field>
           <Field label="Date of birth"><input type="date" value={form.date_of_birth ?? ""} onChange={(e) => set("date_of_birth", e.target.value)} className={input} /></Field>
