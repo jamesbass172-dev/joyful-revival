@@ -11,7 +11,7 @@ export function sessionConfig() {
     password,
     name: "joyco-admin",
     maxAge: 60 * 60 * 24 * 7,
-    cookie: { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" },
+    cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/" },
   };
 }
 

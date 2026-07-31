@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireUnlocked } from "./session";
-import { store, type FoodRecord } from "./store.server";
+import { getStore, saveFood, type FoodRecord } from "./store.server";
 
 export const getFoodGrid = createServerFn({ method: "GET" })
   .inputValidator((d: { year: number }) => d)
   .handler(async ({ data }) => {
     await requireUnlocked();
-    const s = store();
+    const s = await getStore();
     const defaultRequired = Number(s.settings.get("monthly_food_contribution") ?? 20000);
     const students = Array.from(s.students.values());
     return students.map((st) => {
@@ -33,6 +33,6 @@ export const setFoodRecord = createServerFn({ method: "POST" })
   .inputValidator((d: FoodRecord) => d)
   .handler(async ({ data }) => {
     await requireUnlocked();
-    store().food.set(`${data.student_id}|${data.year}|${data.month}`, data);
+    await saveFood(data);
     return { ok: true };
   });

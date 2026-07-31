@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireUnlocked } from "./session";
-import { store } from "./store.server";
+import { getStore } from "./store.server";
 
 export const getDashboard = createServerFn({ method: "GET" }).handler(async () => {
   await requireUnlocked();
-  const s = store();
+  const s = await getStore();
   const students = Array.from(s.students.values()).filter((x) => x.status !== "Withdrawn");
   const boys = students.filter((x) => x.sex === "Male").length;
   const girls = students.filter((x) => x.sex === "Female").length;
