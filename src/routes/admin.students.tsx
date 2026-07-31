@@ -68,12 +68,13 @@ function StudentsPage() {
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
-                <Th>ID</Th><Th>Name</Th><Th>Sex</Th><Th>Age</Th><Th>Class</Th><Th>Session</Th><Th>Guardian</Th><Th>Phone</Th><Th>Status</Th><Th></Th>
+                <Th>Photo</Th><Th>ID</Th><Th>Name</Th><Th>Sex</Th><Th>Age</Th><Th>Class</Th><Th>Session</Th><Th>Guardian</Th><Th>Phone</Th><Th>Status</Th><Th></Th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((s) => (
                 <tr key={s.id} className="border-t border-slate-100 hover:bg-slate-50">
+                  <Td><Avatar src={s.photo_url} name={s.full_name} /></Td>
                   <Td className="font-mono text-xs">{s.id}</Td>
                   <Td className="font-medium">{s.full_name}</Td>
                   <Td>{s.sex ?? ""}</Td>
