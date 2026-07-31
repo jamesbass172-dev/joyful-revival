@@ -194,3 +194,111 @@ function Field({ label, required, children }: { label: string; required?: boolea
     </label>
   );
 }
+
+function initials(name?: string) {
+  return (name ?? "")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+}
+
+function Avatar({ src, name, size = 36 }: { src?: string; name?: string; size?: number }) {
+  return src ? (
+    <img
+      src={src}
+      alt={name ? `Photo of ${name}` : "Student photo"}
+      style={{ width: size, height: size }}
+      className="rounded-full object-cover border border-slate-200"
+    />
+  ) : (
+    <div
+      style={{ width: size, height: size }}
+      className="rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-medium"
+      aria-hidden
+    >
+      {initials(name) || "?"}
+    </div>
+  );
+}
+
+/** Reads a file, downscales it in the browser and returns a compact JPEG data URL. */
+function resizeToDataUrl(file: File, max = 320): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Could not read file"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Could not load image"));
+      img.onload = () => {
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas unavailable"));
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.8));
+      };
+      img.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function PhotoPicker({
+  value,
+  name,
+  onChange,
+}: {
+  value?: string;
+  name?: string;
+  onChange: (v: string | undefined) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setError(null);
+    setBusy(true);
+    try {
+      onChange(await resizeToDataUrl(file));
+    } catch {
+      setError("Could not process that image.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+      <Avatar src={value} name={name} size={72} />
+      <div className="space-y-1">
+        <span className="text-xs font-semibold text-slate-500 uppercase block">Photo</span>
+        <div className="flex items-center gap-2">
+          <label className="px-3 py-1.5 text-sm rounded-md border border-slate-300 hover:bg-slate-50 cursor-pointer">
+            {busy ? "Processing…" : value ? "Replace" : "Upload photo"}
+            <input type="file" accept="image/*" className="hidden" onChange={onFile} />
+          </label>
+          {value && (
+            <button
+              type="button"
+              onClick={() => onChange(undefined)}
+              className="px-3 py-1.5 text-sm rounded-md text-rose-600 hover:bg-rose-50"
+            >
+              Remove
+            </button>
+          )}
+        </div>
+        <p className="text-[11px] text-slate-400">JPG or PNG — resized to 320px and stored with the record.</p>
+        {error && <p className="text-[11px] text-rose-600">{error}</p>}
+      </div>
+    </div>
+  );
+}
