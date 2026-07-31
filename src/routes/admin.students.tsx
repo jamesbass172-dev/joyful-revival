@@ -97,7 +97,7 @@ function StudentsPage() {
                 </tr>
               ))}
               {filtered.length === 0 && (
-                <tr><td colSpan={10} className="text-center py-10 text-slate-400">No students found.</td></tr>
+                <tr><td colSpan={11} className="text-center py-10 text-slate-400">No students found.</td></tr>
               )}
             </tbody>
           </table>
