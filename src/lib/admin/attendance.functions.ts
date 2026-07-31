@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireUnlocked } from "./session";
-import { store, type AttendanceRecord } from "./store.server";
+import { getStore, saveAttendance, type AttendanceRecord } from "./store.server";
 
 export const getAttendanceForDay = createServerFn({ method: "GET" })
   .inputValidator((d: { day: string }) => d)
   .handler(async ({ data }) => {
     await requireUnlocked();
-    const s = store();
+    const s = await getStore();
     const students = Array.from(s.students.values());
     return students.map((st) => {
       const rec = s.attendance.get(`${st.id}|${data.day}`);
@@ -26,6 +26,6 @@ export const setAttendance = createServerFn({ method: "POST" })
   .inputValidator((d: AttendanceRecord) => d)
   .handler(async ({ data }) => {
     await requireUnlocked();
-    store().attendance.set(`${data.student_id}|${data.day}`, data);
+    await saveAttendance(data);
     return { ok: true };
   });
