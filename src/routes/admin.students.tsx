@@ -119,6 +119,7 @@ function Td({ children, className = "" }: { children?: React.ReactNode; classNam
 function StudentDialog({ initial, onClose, onSaved }: { initial: Partial<Student>; onClose: () => void; onSaved: () => void }) {
   const [form, setForm] = useState<Partial<Student>>(initial);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   function set<K extends keyof Student>(k: K, v: Student[K] | undefined) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -128,9 +129,12 @@ function StudentDialog({ initial, onClose, onSaved }: { initial: Partial<Student
     e.preventDefault();
     if (!form.full_name) return;
     setSaving(true);
+    setSaveError(null);
     try {
       await upsertStudent({ data: { ...form, full_name: form.full_name } });
       onSaved();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "The student could not be saved.");
     } finally {
       setSaving(false);
     }
@@ -174,6 +178,7 @@ function StudentDialog({ initial, onClose, onSaved }: { initial: Partial<Student
           <Field label="Emergency contact"><input value={form.emergency_contact ?? ""} onChange={(e) => set("emergency_contact", e.target.value)} className={input} /></Field>
         </div>
         <div className="p-4 border-t border-slate-200 flex justify-end gap-2">
+          {saveError && <p role="alert" className="mr-auto self-center text-sm text-rose-600">{saveError}</p>}
           <button type="button" onClick={onClose} className="px-4 py-2 text-sm rounded-md hover:bg-slate-100">Cancel</button>
           <button type="submit" disabled={saving} className="px-4 py-2 text-sm rounded-md bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-50">
             {saving ? "Saving…" : "Save"}
