@@ -1,13 +1,14 @@
 // Persistent data layer for the admin portal.
 //
 // Two backends, picked automatically at runtime:
-//   1. Cloudflare D1  — used whenever a binding named `DB` is available
-//                       (see wrangler.toml + migrations/0001_admin.sql).
-//   2. JSON snapshot  — used when running on Node (local dev / `vite dev`),
+//   1. Cloudflare D1  — required in production (see wrangler.toml + migrations/0001_admin.sql).
+//   2. JSON snapshot  — used only when running on Node (local dev / `vite dev`),
 //                       written to .data/admin.json so data survives restarts
 //                       and hot reloads.
-// If neither is writable we degrade to an in-process map (never silently
-// loses data within a request, but is not durable).
+// Production never degrades to memory: a missing D1 binding raises an error
+// so the UI cannot claim a record was saved when it was not durable.
+
+import { getCloudflareDatabase, type D1Database } from "./cloudflare-env.server";
 
 export type Student = {
   id: string;
@@ -81,24 +82,12 @@ function emptyStore(): Store {
 
 /* ------------------------------------------------------------------ D1 --- */
 
-type D1Like = {
-  prepare: (sql: string) => {
-    bind: (...args: unknown[]) => { run: () => Promise<unknown>; all: () => Promise<{ results?: unknown[] }> };
-    run: () => Promise<unknown>;
-    all: () => Promise<{ results?: unknown[] }>;
-  };
-};
+function getD1(): D1Database | null {
+  return getCloudflareDatabase();
+}
 
-function getD1(): D1Like | null {
-  const candidates: unknown[] = [
-    (globalThis as Record<string, unknown>).DB,
-    ((globalThis as Record<string, unknown>).__env__ as Record<string, unknown> | undefined)?.DB,
-    (process.env as unknown as Record<string, unknown>)?.DB,
-  ];
-  for (const c of candidates) {
-    if (c && typeof (c as D1Like).prepare === "function") return c as D1Like;
-  }
-  return null;
+function isProduction() {
+  return process.env.NODE_ENV === "production";
 }
 
 /* ------------------------------------------------------------- file I/O --- */
@@ -144,7 +133,7 @@ async function writeSnapshot(s: Store) {
 
 /* --------------------------------------------------------------- loading -- */
 
-async function loadFromD1(db: D1Like): Promise<Store> {
+async function loadFromD1(db: D1Database): Promise<Store> {
   const s = emptyStore();
   const students = (await db.prepare("SELECT * FROM students").all()).results ?? [];
   for (const row of students as Student[]) s.students.set(row.id, row);
@@ -160,11 +149,10 @@ async function loadFromD1(db: D1Like): Promise<Store> {
 async function load(): Promise<Store> {
   const db = getD1();
   if (db) {
-    try {
-      return await loadFromD1(db);
-    } catch {
-      /* table missing / migration not applied — fall through */
-    }
+    return await loadFromD1(db);
+  }
+  if (isProduction()) {
+    throw new Error("Durable student storage is unavailable: Cloudflare D1 binding DB is not configured.");
   }
   const snap = await readSnapshot();
   const s = emptyStore();
@@ -212,6 +200,7 @@ export async function saveStudent(st: Student) {
       .run();
     return;
   }
+  if (isProduction()) throw new Error("Student was not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
@@ -225,6 +214,7 @@ export async function removeStudent(id: string) {
     await db.prepare("DELETE FROM students WHERE id = ?").bind(id).run();
     return;
   }
+  if (isProduction()) throw new Error("Student was not deleted: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
@@ -241,6 +231,7 @@ export async function saveAttendance(rec: AttendanceRecord) {
       .run();
     return;
   }
+  if (isProduction()) throw new Error("Attendance was not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
@@ -257,6 +248,7 @@ export async function saveFood(rec: FoodRecord) {
       .run();
     return;
   }
+  if (isProduction()) throw new Error("Contribution was not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
@@ -270,6 +262,7 @@ export async function saveSettings(entries: Record<string, string>) {
     }
     return;
   }
+  if (isProduction()) throw new Error("Settings were not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
