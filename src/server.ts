@@ -43,6 +43,8 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await withCloudflareBindings(env, () => handler.fetch(request, env, ctx));
+      console.log("Cloudflare env keys:", Object.keys(env as Record<string, unknown>));
+      console.log("DB exists:", Boolean((env as { DB?: unknown }).DB));
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
