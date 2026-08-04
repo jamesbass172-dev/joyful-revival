@@ -152,7 +152,10 @@ async function load(): Promise<Store> {
     return await loadFromD1(db);
   }
   if (isProduction()) {
-    throw new Error("Durable student storage is unavailable: Cloudflare D1 binding DB is not configured.");
+    // Static previews do not receive the deploy target's D1 binding. Keep the
+    // portal readable there; write operations still fail explicitly below so
+    // the UI can never claim ephemeral data was saved.
+    return emptyStore();
   }
   const snap = await readSnapshot();
   const s = emptyStore();
@@ -187,9 +190,10 @@ const STUDENT_COLS = [
 ] as const;
 
 export async function saveStudent(st: Student) {
+  const db = getD1();
+  if (!db && isProduction()) throw new Error("Student was not saved: Cloudflare D1 binding DB is not configured.");
   const s = await getStore();
   s.students.set(st.id, st);
-  const db = getD1();
   if (db) {
     const values = STUDENT_COLS.map((c) => (st as Record<string, unknown>)[c] ?? null);
     await db
@@ -200,28 +204,28 @@ export async function saveStudent(st: Student) {
       .run();
     return;
   }
-  if (isProduction()) throw new Error("Student was not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
 export async function removeStudent(id: string) {
+  const db = getD1();
+  if (!db && isProduction()) throw new Error("Student was not deleted: Cloudflare D1 binding DB is not configured.");
   const s = await getStore();
   s.students.delete(id);
   for (const key of Array.from(s.attendance.keys())) if (key.startsWith(`${id}|`)) s.attendance.delete(key);
   for (const key of Array.from(s.food.keys())) if (key.startsWith(`${id}|`)) s.food.delete(key);
-  const db = getD1();
   if (db) {
     await db.prepare("DELETE FROM students WHERE id = ?").bind(id).run();
     return;
   }
-  if (isProduction()) throw new Error("Student was not deleted: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
 export async function saveAttendance(rec: AttendanceRecord) {
+  const db = getD1();
+  if (!db && isProduction()) throw new Error("Attendance was not saved: Cloudflare D1 binding DB is not configured.");
   const s = await getStore();
   s.attendance.set(`${rec.student_id}|${rec.day}`, rec);
-  const db = getD1();
   if (db) {
     await db
       .prepare(
@@ -231,14 +235,14 @@ export async function saveAttendance(rec: AttendanceRecord) {
       .run();
     return;
   }
-  if (isProduction()) throw new Error("Attendance was not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
 export async function saveFood(rec: FoodRecord) {
+  const db = getD1();
+  if (!db && isProduction()) throw new Error("Contribution was not saved: Cloudflare D1 binding DB is not configured.");
   const s = await getStore();
   s.food.set(`${rec.student_id}|${rec.year}|${rec.month}`, rec);
-  const db = getD1();
   if (db) {
     await db
       .prepare(
@@ -248,21 +252,20 @@ export async function saveFood(rec: FoodRecord) {
       .run();
     return;
   }
-  if (isProduction()) throw new Error("Contribution was not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
 export async function saveSettings(entries: Record<string, string>) {
+  const db = getD1();
+  if (!db && isProduction()) throw new Error("Settings were not saved: Cloudflare D1 binding DB is not configured.");
   const s = await getStore();
   for (const [k, v] of Object.entries(entries)) s.settings.set(k, String(v));
-  const db = getD1();
   if (db) {
     for (const [k, v] of Object.entries(entries)) {
       await db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES (?,?)").bind(k, String(v)).run();
     }
     return;
   }
-  if (isProduction()) throw new Error("Settings were not saved: Cloudflare D1 binding DB is not configured.");
   await writeSnapshot(s);
 }
 
