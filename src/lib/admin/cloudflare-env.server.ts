@@ -17,6 +17,9 @@ type CloudflareBindings = {
 const requestBindings = new AsyncLocalStorage<CloudflareBindings>();
 
 export function withCloudflareBindings<T>(env: unknown, operation: () => T): T {
+  console.log("ENV KEYS:", Reflect.ownKeys(env as object));
+  console.log("ENV:", env);
+
   return requestBindings.run((env ?? {}) as CloudflareBindings, operation);
 }
 
