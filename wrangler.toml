@@ -15,4 +15,4 @@ binding = "ASSETS"
 [[d1_databases]]
 binding = "DB"
 database_name = "joyco-admin"
-database_id = "REPLACE_WITH_YOUR_CLOUDFLARE_D1_DATABASE_ID"
+database_id = "122b8b66-1978-41b1-ab43-6c4bc0d73c29"
