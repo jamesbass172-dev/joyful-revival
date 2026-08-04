@@ -21,5 +21,10 @@ export function withCloudflareBindings<T>(env: unknown, operation: () => T): T {
 }
 
 export function getCloudflareDatabase(): D1Database | null {
-  return requestBindings.getStore()?.DB ?? null;
+  const store = requestBindings.getStore();
+
+  console.log("Cloudflare binding store exists:", Boolean(store));
+  console.log("DB binding exists:", Boolean(store?.DB));
+
+  return store?.DB ?? null;
 }
