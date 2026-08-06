@@ -39,10 +39,16 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 export default {
-  async fetch(request: Request, env: unknown, ctx: unknown) {
+  async fetch(request: Request, env: any, ctx: unknown) {
+    console.log("ENV KEYS:", Object.keys(env));
+    console.log("DB exists:", !!env.DB);
+    console.log("DB type:", typeof env.DB);
+
     try {
       const handler = await getServerEntry();
-      const response = await withCloudflareBindings(env, () => handler.fetch(request, env, ctx));
+      const response = await withCloudflareBindings(env, () =>
+        handler.fetch(request, env, ctx)
+      );
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
