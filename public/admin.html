@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Joyful Montessori – Admin</title>
+<style>
+  :root {
+    --bg: #faf8f3;
+    --ink: #1f2a37;
+    --muted: #6b7280;
+    --line: #e5e1d8;
+    --brand: #2f6f5e;
+    --brand-dark: #245547;
+    --danger: #b42318;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.5;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; font: inherit; color: inherit;
+    border: 1px solid var(--line); border-radius: 8px; background: #fff;
+  }
+  input:focus, select:focus, textarea:focus, button:focus-visible {
+    outline: 2px solid var(--brand); outline-offset: 1px;
+  }
+  label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
+  button {
+    font: inherit; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--brand);
+    background: var(--brand); color: #fff; cursor: pointer;
+  }
+  button:hover { background: var(--brand-dark); }
+  button.secondary { background: #fff; color: var(--brand); }
+  button.secondary:hover { background: #f1f5f3; }
+  button.danger { background: #fff; color: var(--danger); border-color: var(--danger); padding: 4px 10px; font-size: .85rem; }
+  button.danger:hover { background: #fdf0ee; }
+  button:disabled { opacity: .6; cursor: wait; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .grid .wide { grid-column: 1 / -1; }
+  .msg { font-size: .9rem; margin: 8px 0 0; }
+  .msg.error { color: var(--danger); }
+  .msg.ok { color: var(--brand); }
+  #login { max-width: 360px; margin: 80px auto; }
+  #login .panel > * + * { margin-top: 12px; }
+  .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .student { display: flex; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .student img, .student .noimg { width: 72px; height: 72px; border-radius: 8px; object-fit: cover; flex: none; background: #ece8dd; }
+  .student h3 { margin: 0 0 2px; font-size: 1rem; }
+  .student p { margin: 0; font-size: .85rem; color: var(--muted); }
+  .student .actions { margin-top: 8px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="hidden">
+  <div class="panel">
+    <h1>Admin login</h1>
+    <div><label for="email">Email</label><input id="email" type="email" autocomplete="username"></div>
+    <div><label for="password">Password</label><input id="password" type="password" autocomplete="current-password"></div>
+    <button id="loginBtn" style="width:100%">Sign in</button>
+    <p id="loginMsg" class="msg error"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="wrap hidden">
+  <header>
+    <h1>Students</h1>
+    <div class="row">
+      <button id="toggleForm">Add student</button>
+      <button id="logoutBtn" class="secondary">Log out</button>
+    </div>
+  </header>
+
+  <form id="studentForm" class="panel hidden">
+    <div class="grid">
+      <div><label for="first_name">First name *</label><input id="first_name" required></div>
+      <div><label for="last_name">Last name *</label><input id="last_name" required></div>
+      <div><label for="date_of_birth">Date of birth *</label><input id="date_of_birth" type="date" required></div>
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender"><option value="">–</option><option>Female</option><option>Male</option></select>
+      </div>
+      <div><label for="guardian_name">Guardian name</label><input id="guardian_name"></div>
+      <div><label for="guardian_phone">Guardian phone</label><input id="guardian_phone" type="tel"></div>
+      <div class="wide"><label for="notes">Notes</label><textarea id="notes" rows="2"></textarea></div>
+      <div class="wide"><label for="photo">Photo</label><input id="photo" type="file" accept="image/*"></div>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <button id="saveBtn" type="submit">Save student</button>
+    </div>
+    <p id="formMsg" class="msg"></p>
+  </form>
+
+  <div style="margin-bottom:16px">
+    <input id="search" type="search" placeholder="Search by name…">
+  </div>
+  <div id="list" class="list"></div>
+  <p id="empty" class="msg hidden" style="color:var(--muted)">No students yet. Use "Add student" to add the first one.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+  // ====== PASTE YOUR VALUES HERE ======
+  const SUPABASE_URL = "https://ebdfsymacusdpzcisnuu.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_jXTGrMPvoqfVYXkCcQ1WLw_UxdYq8az";
+  // ====================================
+
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const $ = (id) => document.getElementById(id);
+  let students = [];
+  let photoUrls = {};
+
+  function show(el, on) { $(el).classList.toggle("hidden", !on); }
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  // ----- Auth -----
+  async function init() {
+    const { data } = await db.auth.getSession();
+    if (data.session) { showApp(); } else { show("login", true); show("app", false); }
+  }
+
+  $("loginBtn").onclick = async () => {
+    $("loginMsg").textContent = "";
+    const { error } = await db.auth.signInWithPassword({
+      email: $("email").value.trim(), password: $("password").value,
+    });
+    if (error) $("loginMsg").textContent = error.message; else showApp();
+  };
+  $("password").addEventListener("keydown", (e) => { if (e.key === "Enter") $("loginBtn").click(); });
+
+  $("logoutBtn").onclick = async () => {
+    await db.auth.signOut();
+    show("app", false); show("login", true);
+  };
+
+  function showApp() {
+    show("login", false); show("app", true);
+    loadStudents();
+  }
+
+  // ----- Load + render -----
+  async function loadStudents() {
+    const { data, error } = await db.from("students").select("*").order("last_name");
+    if (error) { alert("Could not load students: " + error.message); return; }
+    students = data || [];
+
+    const paths = students.map((s) => s.photo_path).filter(Boolean);
+    photoUrls = {};
+    if (paths.length) {
+      const { data: signed } = await db.storage.from("student-photos").createSignedUrls(paths, 3600);
+      (signed || []).forEach((s) => { if (s.signedUrl) photoUrls[s.path] = s.signedUrl; });
+    }
+    render();
+  }
+
+  function render() {
+    const q = $("search").value.toLowerCase().trim();
+    const rows = students.filter((s) => (s.first_name + " " + s.last_name).toLowerCase().includes(q));
+    $("list").innerHTML = rows.map((s) => `
+      <div class="student">
+        ${photoUrls[s.photo_path] ? `<img src="${esc(photoUrls[s.photo_path])}" alt="">` : `<div class="noimg"></div>`}
+        <div>
+          <h3>${esc(s.first_name)} ${esc(s.last_name)}</h3>
+          <p>Born ${esc(s.date_of_birth)}${s.gender ? " · " + esc(s.gender) : ""}</p>
+          ${s.guardian_name ? `<p>Guardian: ${esc(s.guardian_name)} ${esc(s.guardian_phone)}</p>` : ""}
+          ${s.notes ? `<p>${esc(s.notes)}</p>` : ""}
+          <div class="actions"><button class="danger" data-del="${esc(s.id)}">Delete</button></div>
+        </div>
+      </div>`).join("");
+    show("empty", students.length === 0);
+  }
+
+  $("search").addEventListener("input", render);
+
+  $("list").addEventListener("click", async (e) => {
+    const id = e.target.dataset.del;
+    if (!id) return;
+    const s = students.find((x) => x.id === id);
+    if (!confirm(`Delete ${s.first_name} ${s.last_name}? This cannot be undone.`)) return;
+    if (s.photo_path) await db.storage.from("student-photos").remove([s.photo_path]);
+    const { error } = await db.from("students").delete().eq("id", id);
+    if (error) alert(error.message); else loadStudents();
+  });
+
+  // ----- Add student -----
+  $("toggleForm").onclick = () => {
+    const form = $("studentForm");
+    form.classList.toggle("hidden");
+    $("toggleForm").textContent = form.classList.contains("hidden") ? "Add student" : "Cancel";
+  };
+
+  $("studentForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const msg = $("formMsg");
+    msg.className = "msg"; msg.textContent = "";
+    $("saveBtn").disabled = true;
+
+    const record = {
+      first_name: $("first_name").value.trim(),
+      last_name: $("last_name").value.trim(),
+      date_of_birth: $("date_of_birth").value,
+      gender: $("gender").value || null,
+      guardian_name: $("guardian_name").value.trim() || null,
+      guardian_phone: $("guardian_phone").value.trim() || null,
+      notes: $("notes").value.trim() || null,
+    };
+
+    const { data: created, error } = await db.from("students").insert(record).select().single();
+    if (error) {
+      msg.className = "msg error"; msg.textContent = error.message;
+      $("saveBtn").disabled = false; return;
+    }
+
+    const file = $("photo").files[0];
+    if (file) {
+      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `${created.id}/${Date.now()}-${safe}`;
+      const up = await db.storage.from("student-photos").upload(path, file);
+      if (up.error) {
+        msg.className = "msg error"; msg.textContent = "Student saved, but the photo failed: " + up.error.message;
+      } else {
+        await db.from("students").update({ photo_path: path }).eq("id", created.id);
+      }
+    }
+
+    $("studentForm").reset();
+    if (!msg.textContent) { msg.className = "msg ok"; msg.textContent = "Student saved."; }
+    $("saveBtn").disabled = false;
+    loadStudents();
+  };
+
+  init();
+</script>
+</body>
+</html>
