@@ -7,7 +7,7 @@ export const projects = [
     title: "BAG Program",
     img: "https://static.wixstatic.com/media/eee064_97b9318ee3d34530bd06d8a397e763cc~mv2.jpg/v1/fill/w_576,h_576,al_c,q_80,enc_avif,quality_auto/41v.jpg",
     body: "Bridging Access for Girls program aims to provide free school supplies and materials to underprivileged girls.",
-    cta: { label: "Coming Soon", href: "#" },
+    cta: { label: "Learn More", href: "#bag-program" },
   },
   {
     title: "Tungi Outreach Program",
