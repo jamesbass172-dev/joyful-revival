@@ -9,25 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TungiOutreachRouteImport } from './routes/tungi-outreach'
-import { Route as OurTeamRouteImport } from './routes/our-team'
-import { Route as OtherProjectsRouteImport } from './routes/other-projects'
-import { Route as MontessoriProjectRouteImport } from './routes/montessori-project'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MontessoriProjectRouteImport } from './routes/montessori-project'
+import { Route as OtherProjectsRouteImport } from './routes/other-projects'
+import { Route as OurTeamRouteImport } from './routes/our-team'
+import { Route as TungiOutreachRouteImport } from './routes/tungi-outreach'
 
-const TungiOutreachRoute = TungiOutreachRouteImport.update({
-  id: '/tungi-outreach',
-  path: '/tungi-outreach',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OurTeamRoute = OurTeamRouteImport.update({
-  id: '/our-team',
-  path: '/our-team',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OtherProjectsRoute = OtherProjectsRouteImport.update({
-  id: '/other-projects',
-  path: '/other-projects',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MontessoriProjectRoute = MontessoriProjectRouteImport.update({
@@ -35,9 +25,19 @@ const MontessoriProjectRoute = MontessoriProjectRouteImport.update({
   path: '/montessori-project',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const OtherProjectsRoute = OtherProjectsRouteImport.update({
+  id: '/other-projects',
+  path: '/other-projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OurTeamRoute = OurTeamRouteImport.update({
+  id: '/our-team',
+  path: '/our-team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TungiOutreachRoute = TungiOutreachRouteImport.update({
+  id: '/tungi-outreach',
+  path: '/tungi-outreach',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -97,25 +97,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tungi-outreach': {
-      id: '/tungi-outreach'
-      path: '/tungi-outreach'
-      fullPath: '/tungi-outreach'
-      preLoaderRoute: typeof TungiOutreachRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/our-team': {
-      id: '/our-team'
-      path: '/our-team'
-      fullPath: '/our-team'
-      preLoaderRoute: typeof OurTeamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/other-projects': {
-      id: '/other-projects'
-      path: '/other-projects'
-      fullPath: '/other-projects'
-      preLoaderRoute: typeof OtherProjectsRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/montessori-project': {
@@ -125,11 +111,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MontessoriProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/other-projects': {
+      id: '/other-projects'
+      path: '/other-projects'
+      fullPath: '/other-projects'
+      preLoaderRoute: typeof OtherProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/our-team': {
+      id: '/our-team'
+      path: '/our-team'
+      fullPath: '/our-team'
+      preLoaderRoute: typeof OurTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tungi-outreach': {
+      id: '/tungi-outreach'
+      path: '/tungi-outreach'
+      fullPath: '/tungi-outreach'
+      preLoaderRoute: typeof TungiOutreachRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
