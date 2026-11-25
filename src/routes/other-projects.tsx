@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { projects } from "@/content/site-content";
 import { Download, Phone, Mail, MapPin } from "lucide-react";
-import bagPoster from "@/assets/bag-program-poster.pdf.asset.json";
+import bagDescription from "@/assets/bag-program-description.pdf.asset.json";
+import { Button } from "@/components/ui/button";
 import bagClassroom from "@/assets/bag-classroom-children.jpg.asset.json";
 import bagPortrait from "@/assets/bag-student-portrait.jpg.asset.json";
 
@@ -86,9 +87,11 @@ function Other() {
               <p className="mt-4 text-muted-foreground leading-relaxed">
                 Through the BAG Program, JOYCO is committed to making sure that financial hardship does not stop girls from pursuing their educational dreams. In 2026 the program supported <strong className="text-foreground">10 girls</strong> and in 2027 we aim to reach <strong className="text-foreground">25 girls</strong>. Your contribution, in cash or in kind, will help girls attend school regularly, learn with confidence and pursue their future aspirations.
               </p>
-              <a href={bagPoster.url} target="_blank" rel="noopener noreferrer" className="btn-accent inline-flex items-center gap-2 mt-6">
-                <Download className="h-4 w-4" /> Download the program poster (PDF)
-              </a>
+              <Button asChild variant="secondary" className="btn-accent mt-6 h-auto whitespace-normal text-center">
+                <a href={bagDescription.url} download="The_BAG_Program_description.pdf">
+                  <Download className="h-4 w-4" /> Download the BAG Programme description (PDF)
+                </a>
+              </Button>
             </div>
           </div>
 
