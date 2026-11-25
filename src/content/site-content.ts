@@ -1,23 +1,27 @@
-// Image URLs from the original source site (Wix CDN). Kept verbatim per request.
+import bagCover from "@/assets/bag-program-cover.jpg.asset.json";
+import tungiCover from "@/assets/tungi-outreach-cover.jpg.asset.json";
+import legalCover from "@/assets/legal-assistance-cover.jpg.asset.json";
+
+// Original pictures preserved; project covers use stored copies for reliable delivery.
 export const logoUrl =
   "https://static.wixstatic.com/media/eee064_6917632f497c499f94149a34f18721b6~mv2.png";
 
 export const projects = [
   {
     title: "BAG Program",
-    img: "https://static.wixstatic.com/media/eee064_97b9318ee3d34530bd06d8a397e763cc~mv2.jpg/v1/fill/w_576,h_576,al_c,q_80,enc_avif,quality_auto/41v.jpg",
+    img: bagCover.url,
     body: "Bridging Access for Girls program aims to provide free school supplies and materials to underprivileged girls.",
     cta: { label: "Learn More", href: "#bag-program" },
   },
   {
     title: "Tungi Outreach Program",
-    img: "https://static.wixstatic.com/media/eee064_df20c313b8eb4b008b735b13dbdb9134~mv2.jpg/v1/fill/w_603,h_603,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/3v.jpg",
+    img: tungiCover.url,
     body: "Providing food, clothes, and support to underprivileged children and their families.",
     cta: { label: "Learn More", href: "/tungi-outreach" },
   },
   {
     title: "Legal Assistance",
-    img: "https://static.wixstatic.com/media/eee064_6868867ac0564d25b4d0435eb68559fa~mv2.jpg/v1/fill/w_603,h_603,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ai-generated-IMAGE.jpg",
+    img: legalCover.url,
     body: "Expert legal aid to defend children's rights and ensure safety.",
     cta: { label: "Coming Soon", href: "#" },
   },

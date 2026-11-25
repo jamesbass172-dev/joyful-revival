@@ -13,6 +13,8 @@ export const Route = createFileRoute("/other-projects")({
       { name: "description", content: "Explore JOYCO's programs: the BAG Program, Tungi Outreach, and Legal Assistance for children in Tanzania." },
       { property: "og:title", content: "Explore Our Projects — Joy for the Children" },
       { property: "og:description", content: "Explore JOYCO's programs: the BAG Program, Tungi Outreach, and Legal Assistance for children in Tanzania." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Other,
@@ -43,7 +45,7 @@ function Other() {
           return (
             <article key={p.title} className="bg-card rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-soft)] flex flex-col">
               <div className="aspect-square overflow-hidden">
-                <img src={p.img} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
+                <img src={p.img} alt={p.title} className="h-full w-full object-cover" loading="eager" />
               </div>
               <div className="p-6 flex flex-col flex-1">
                 <h2 className="text-2xl">{p.title}</h2>

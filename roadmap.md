@@ -1,0 +1,3 @@
+- [x] Store the four uploaded Montessori photos.
+- [x] Extend the Montessori gallery without removing existing pictures.
+- [x] Make Other Projects images independent of Wix delivery and verify loading.

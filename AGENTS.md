@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Reference uploaded and stabilized project photos through asset-pointer imports so media delivery does not depend on the original site's image transformations.

@@ -1,7 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
-import { heroImages, missionImage } from "@/content/site-content";
+import { heroImages } from "@/content/site-content";
 import { BookOpen, Users, Sparkles } from "lucide-react";
+import classroomGroup from "@/assets/montessori-classroom-group.jpg.asset.json";
+import studentCelebration from "@/assets/montessori-student-celebration.jpg.asset.json";
+import classroomActivity from "@/assets/montessori-classroom-activity.jpg.asset.json";
+import classmates from "@/assets/montessori-classmates.jpg.asset.json";
+
+const additionalPhotos = [
+  { src: classroomGroup.url, alt: "Montessori children celebrating together in their classroom" },
+  { src: studentCelebration.url, alt: "A Montessori student holding a wrapped gift" },
+  { src: classroomActivity.url, alt: "Montessori children clapping during a classroom activity" },
+  { src: classmates.url, alt: "Montessori classmates taking part in a classroom celebration" },
+];
 
 export const Route = createFileRoute("/montessori-project")({
   head: () => ({
@@ -9,7 +20,11 @@ export const Route = createFileRoute("/montessori-project")({
       { title: "Montessori Project — Joy for the Children" },
       { name: "description", content: "Our Montessori-based education initiative supports vulnerable children in Tanzania with quality early learning." },
       { property: "og:title", content: "Montessori Project — Joy for the Children" },
-      { property: "og:image", content: missionImage },
+      { property: "og:description", content: "Our Montessori-based education initiative supports vulnerable children in Tanzania with quality early learning." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: heroImages[1] },
+      { name: "twitter:image", content: heroImages[1] },
     ],
   }),
   component: Montessori,
@@ -46,6 +61,9 @@ function Montessori() {
       <section className="container-narrow pb-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {heroImages.map((src) => (
           <img key={src} src={src} alt="Montessori project" className="rounded-2xl aspect-square object-cover w-full" loading="lazy" />
+        ))}
+        {additionalPhotos.map((photo) => (
+          <img key={photo.src} src={photo.src} alt={photo.alt} className="rounded-2xl aspect-square object-contain bg-secondary w-full" loading="lazy" />
         ))}
       </section>
 
